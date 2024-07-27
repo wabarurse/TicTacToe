@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <vector>
+#include <limits.h>
+
 
 using namespace std;
 
@@ -15,6 +17,12 @@ int numVacant = 9;
 vector<vector<char>> tttBoard {{'_', '_', '_'},
                                {'_', '_', '_'},
                                {'_', '_', '_'}};
+
+//vector<vector<char>> tttBoard {{'o', '_', 'x'},
+//                               {'o', 'o', '_'},
+//                               {'x', '_', '_'}};
+
+
 void playerMove() {
     int choice;
     cout << "> ";
@@ -54,38 +62,39 @@ void playerMove() {
     
 }
 
-void printBoard(vector<vector<char>> board) {
-    for(auto vec : board) {
+void printBoard() {
+    for(auto vec : tttBoard) {
         for(auto v : vec) {
             cout << v << " ";
         }
         cout << '\n';
     }
+    cout << '\n';
 }
 
 
-char determineWinner(vector<vector<char>> board) {
+char determineWinner() {
     char winner = '/';
     
     // horizontal
     for(int i = 0; i < 3; i++) {
-        if(board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] != '_') {
-            winner = board[i][0];
+        if(tttBoard[i][0] == tttBoard[i][1] && tttBoard[i][0] == tttBoard[i][2] && tttBoard[i][0] != '_') {
+            winner = tttBoard[i][0];
         }
     }
     
     // vertical
     for(int i = 0; i < 3; i++) {
-        if(board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] != '_') {
-            winner = board[0][i];
+        if(tttBoard[0][i] == tttBoard[1][i] && tttBoard[0][i] == tttBoard[2][i] && tttBoard[0][i] != '_') {
+            winner = tttBoard[0][i];
         }
     }
     
     //diagonal
-    if(board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != '_') {
-        winner = board[0][0];
-    } else if(board[0][2] == board[1][1] && board[0][0] == board[2][0] && board[0][2] != '_') {
-        winner = board[0][2];
+    if(tttBoard[0][0] == tttBoard[1][1] && tttBoard[0][0] == tttBoard[2][2] && tttBoard[0][0] != '_') {
+        winner = tttBoard[0][0];
+    } else if(tttBoard[0][2] == tttBoard[1][1] && tttBoard[0][2] == tttBoard[2][0] && tttBoard[0][2] != '_') {
+        winner = tttBoard[0][2];
     }
     
     
@@ -100,41 +109,43 @@ char determineWinner(vector<vector<char>> board) {
 }
 
 
-int minmaxAlg(vector<vector<char>> board, bool isMaximizing) {
-    char winner = determineWinner(tttBoard);
-    int score;
+int minmaxAlg(bool isMaximizing) {
+    char winner = determineWinner();
     if(winner != '/') {
         if(winner == 'x') {
-            score = 1 + 1 * numVacant;
+            return 10 + numVacant;
         } else if(winner == 'o') {
-            score = -1 - 1 * numVacant;
+            return -10 - numVacant;
         } else {
-            score = 0;
+            return 0;
         }
-        return score;
     }
     
     if(isMaximizing) {
-        int bestScore = -100;
+        int bestScore = INT_MIN;
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                if (board[i][j] == ' ') {
-                    board[i][j] = 'x';
-                    int currScore = minmaxAlg(board, false);
-                    board[i][j] = ' ';
+                if (tttBoard[i][j] == '_') {
+                    tttBoard[i][j] = 'x';
+                    numVacant--;
+                    int currScore = minmaxAlg(false);
+                    tttBoard[i][j] = '_';
+                    numVacant++;
                     bestScore = max(currScore, bestScore);
                 }
             }
         }
         return bestScore;
     } else {
-        int bestScore = 100;
+        int bestScore = INT_MAX;
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                if (board[i][j] == ' ') {
-                    board[i][j] = 'x';
-                    int currScore = minmaxAlg(board, true);
-                    board[i][j] = ' ';
+                if (tttBoard[i][j] == '_') {
+                    tttBoard[i][j] = 'o';
+                    numVacant--;
+                    int currScore = minmaxAlg(true);
+                    tttBoard[i][j] = '_';
+                    numVacant++;
                     bestScore = min(currScore, bestScore);
                 }
             }
@@ -145,18 +156,20 @@ int minmaxAlg(vector<vector<char>> board, bool isMaximizing) {
 
 
 void computerMove() {
-    int bestScore = -100;
-    int coord[2];
+    int bestScore = INT_MIN;
+    int coord[2] = {-1,-1};
     
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (tttBoard[i][j] == ' ') {
-                tttBoard[i][j] = 'X';
-                int score = minmaxAlg(tttBoard, false);
-                tttBoard[i][j] = ' ';
+            if (tttBoard[i][j] == '_') {
+                tttBoard[i][j] = 'x';
+                numVacant--;
+                int currScore = minmaxAlg(false);
+                tttBoard[i][j] = '_';
+                numVacant++;
 
-                if (score > bestScore) {
-                    bestScore = score;
+                if (currScore > bestScore) {
+                    bestScore = currScore;
                     coord[0] = i;
                     coord[1] = j;
                 }
@@ -165,12 +178,42 @@ void computerMove() {
         }
     }
     
+    tttBoard[coord[0]][coord[1]] = 'x';
+    numVacant--;
+    
 }
 
 
 
 int main() {
-    printBoard(tttBoard);
-    playerMove();
-    printBoard(tttBoard);
+ 
+    char winner;
+
+    while(true) {
+
+        printBoard();
+        playerMove();
+        cout << "player move:" << '\n';
+
+        winner = determineWinner();
+        if(winner != '/') {
+            printBoard();
+            cout << winner << '\n';
+            break;
+        }
+
+        printBoard();
+        computerMove();
+        cout << "computer move:" << '\n';
+
+
+        winner = determineWinner();
+        if(winner != '/') {
+            printBoard();
+            cout << winner << '\n';
+            break;
+        }
+
+    }
+    
 }
