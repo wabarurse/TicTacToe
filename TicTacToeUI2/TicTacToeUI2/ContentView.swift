@@ -1,0 +1,102 @@
+//
+//  ContentView.swift
+//  TicTacToeUI2
+//
+//  Created by Richard Huang on 2024-08-01.
+//
+
+import SwiftUI
+
+struct ContentView: View {
+    
+    @State private var moves: [Move?] = Array(repeating: nil, count: 9)
+    @State private var board: [String] = Array(repeating: "_", count: 9)
+    @State private var numVacant = 9
+    
+    let columns: [GridItem] = [GridItem(.flexible()),
+                               GridItem(.flexible()),
+                               GridItem(.flexible()) ]
+    
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 20) {
+            ForEach(0..<9) { i in
+                ZStack {
+                    Circle()
+                        .foregroundColor(.black).opacity(0.8)
+                    
+                    Image(systemName: moves[i]?.icon ?? "")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.white)
+                    
+                }
+                .onTapGesture {
+                    if(moves[i] == nil) {
+                        moves[i] = Move(player: .human, index: i)
+                        board[i] = "o"
+                        numVacant -= 1
+                    }
+                }
+            }
+        }
+        .padding(20)
+    }
+    
+    
+    func determineWinner() -> String {
+        var winner: String = "/"
+                
+        // horizontal
+        for i in stride(from: 0, through: 6, by: 3) {
+            if(board[i] == board[i + 1] && board[i] == board[i + 2] && board[i] != "_") {
+                winner = board[i];
+            }
+        }
+        
+        // vertical
+        for i in stride(from: 0, through: 2, by: 1) {
+            if(board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != "_") {
+                winner = board[i];
+            }
+        }
+        
+        //diagonal
+        if(board[0] == board[4] && board[0] == board[8] && board[0] != "_") {
+            winner = board[0];
+        } else if(board[2] == board[4] && board[2] == board[6] && board[2] != "_") {
+            winner = board[2];
+        }
+        
+        
+        //tie
+        if(winner == "/" && numVacant == 0) {
+            winner = "t";
+        }
+        
+        
+        return winner;
+        
+        
+    }
+    
+    
+        
+}
+
+enum Player {
+    case human, computer
+}
+
+struct Move {
+    let player: Player
+    let index: Int
+    
+    var icon: String {
+        return player == .human ? "circle" : "xmark"
+    }
+    
+}
+
+#Preview {
+    ContentView()
+}

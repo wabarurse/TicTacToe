@@ -39,7 +39,7 @@ struct ContentView: View {
                             
                         }
                         .onTapGesture {
-                            if isSquareOccupied(in: moves, forIndex: i) { return }
+                            //if isSquareOccupied(in: moves, forIndex: i) { return }
                             
                             moves[i] = Move(player: .human, boardIndex: i)
                             boardDisabled = true
