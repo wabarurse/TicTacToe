@@ -31,11 +31,24 @@ struct ContentView: View {
                     
                 }
                 .onTapGesture {
+                    
+                    
+                    
                     if(moves[i] == nil) {
                         moves[i] = Move(player: .human, index: i)
                         board[i] = "o"
                         numVacant -= 1
                     }
+                    
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5)  {
+//                        print(computerMove())
+//                        let computerPosition = computerMove()
+//                        moves[computerPosition] = Move(player: .computer, index: computerPosition)
+//                        board[computerPosition] = "x"
+//                        numVacant -= 1
+//
+//                    }
+                    
                 }
             }
         }
@@ -45,7 +58,7 @@ struct ContentView: View {
     
     func determineWinner() -> String {
         var winner: String = "/"
-                
+        
         // horizontal
         for i in stride(from: 0, through: 6, by: 3) {
             if(board[i] == board[i + 1] && board[i] == board[i + 2] && board[i] != "_") {
@@ -79,9 +92,85 @@ struct ContentView: View {
         
     }
     
-    
+    func minmax(isMaximizing: Bool) -> Int {
+        let winner: String = determineWinner()
         
+        if(winner != "/") {
+            if(winner == "x") {
+                return 10 + numVacant;
+            } else if(winner == "x") {
+                return -10 - numVacant;
+            } else {
+                return 0;
+            }
+        }
+        
+        if(isMaximizing) {
+            var bestScore: Int = -100;
+            for i in 0..<9 {
+                if (board[i] == "_") {
+                    
+                    board[i] = "x"; numVacant-=1;
+                    
+                    let currScore: Int = minmax(isMaximizing: false);
+                    
+                    board[i] = "_"; numVacant+=1;
+                    
+                    bestScore = max(currScore, bestScore);
+                }
+            }
+            
+            return bestScore;
+            
+        } else {
+            var bestScore: Int = 100;
+            for i in 0..<9 {
+                if (board[i] == "_") {
+                    
+                    board[i] = "o"; numVacant-=1;
+                    
+                    let currScore: Int = minmax(isMaximizing: true);
+                    
+                    board[i] = "_"; numVacant+=1;
+                    
+                    bestScore = min(currScore, bestScore);
+                }
+            }
+            
+            return bestScore;
+            
+        }
+        
+    }
+    
+    
+    func computerMove() -> Int {
+        var bestScore: Int = -100;
+        var coord: Int = -1;
+        
+        for i in 0..<9 {
+            if (board[i] == "_") {
+                
+                board[i] = "x"; numVacant-=1;
+                
+                let currScore: Int = minmax(isMaximizing: false);
+                
+                board[i] = "_"; numVacant+=1;
+
+                if (currScore > bestScore) {
+                    bestScore = currScore;
+                    coord = i;
+                
+                }
+            }
+        }
+        
+        return coord
+        
+    }
+    
 }
+    
 
 enum Player {
     case human, computer
