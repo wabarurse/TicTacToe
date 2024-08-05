@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var board: [String] = Array(repeating: "_", count: 9)
     @State private var numVacant = 9
     @State private var alertItem: AlertItem?
+    @State private var boardDisabled = false
     
     let columns: [GridItem] = [GridItem(.flexible()),
                                GridItem(.flexible()),
@@ -48,12 +49,16 @@ struct ContentView: View {
                         return
                     }
                     
+                    boardDisabled = true
+                    
  
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         let computerPosition = computerMove()
                         moves[computerPosition] = Move(player: .computer, index: computerPosition)
                         board[computerPosition] = "x"
                         numVacant -= 1
+                        
+                        boardDisabled = false
                         
                         if(determineWinner() == "x") {
                             alertItem = AlertContent.computerWin
@@ -67,6 +72,7 @@ struct ContentView: View {
             }
         }
         .padding(20)
+        .disabled(boardDisabled)
         .alert(item: $alertItem, content: {alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: .default(alertItem.button, action: { resetGame() }))
         })
@@ -193,22 +199,6 @@ struct ContentView: View {
     }
     
 }
-
-func isSquareOccupied(in moves: [Move?], forIndex i: Int) -> Bool {
-    return moves.contains(where: {$0?.index == i})
-}
-
-func randComputerMove(in moves: [Move?]) -> Int {
-    var movePosition = Int.random(in: 0..<9)
-    
-    while isSquareOccupied(in: moves, forIndex: movePosition) {
-        movePosition = Int.random(in: 0..<9)
-    }
-    
-    return movePosition
-    
-}
-    
 
 enum Player {
     case human, computer
