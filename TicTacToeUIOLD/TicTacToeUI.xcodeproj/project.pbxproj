@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		624CAA352C615ECF00704368 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CAA342C615ECF00704368 /* Alert.swift */; };
 		62A1F5402C5C14820033F8F6 /* TicTacToeUI2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A1F53F2C5C14820033F8F6 /* TicTacToeUI2App.swift */; };
 		62A1F5422C5C14820033F8F6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A1F5412C5C14820033F8F6 /* ContentView.swift */; };
 		62A1F5442C5C14830033F8F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62A1F5432C5C14830033F8F6 /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		624CAA342C615ECF00704368 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		62A1F53C2C5C14820033F8F6 /* TicTacToeUI2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToeUI2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62A1F53F2C5C14820033F8F6 /* TicTacToeUI2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeUI2App.swift; sourceTree = "<group>"; };
 		62A1F5412C5C14820033F8F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 				62A1F5412C5C14820033F8F6 /* ContentView.swift */,
 				62A1F5432C5C14830033F8F6 /* Assets.xcassets */,
 				62A1F5452C5C14830033F8F6 /* Preview Content */,
+				624CAA342C615ECF00704368 /* Alert.swift */,
 			);
 			path = TicTacToeUI2;
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				624CAA352C615ECF00704368 /* Alert.swift in Sources */,
 				62A1F5422C5C14820033F8F6 /* ContentView.swift in Sources */,
 				62A1F5402C5C14820033F8F6 /* TicTacToeUI2App.swift in Sources */,
 			);

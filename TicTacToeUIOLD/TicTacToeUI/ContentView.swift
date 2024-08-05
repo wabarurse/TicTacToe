@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var moves: [Move?] = Array(repeating: nil, count: 9)
     @State private var board: [String] = Array(repeating: "_", count: 9)
     @State private var numVacant = 9
+    @State private var alertItem: AlertItem?
     
     let columns: [GridItem] = [GridItem(.flexible()),
                                GridItem(.flexible()),
@@ -37,53 +38,38 @@ struct ContentView: View {
                         board[i] = "o"
                         numVacant -= 1
                     }
-                    printBoard()
 
                     
                     if(determineWinner() == "o") {
-                        print("Human win")
+                        alertItem = AlertContent.humanWin
+                        return
+                    } else if(determineWinner() == "t") {
+                        alertItem = AlertContent.draw
+                        return
                     }
                     
-//                    computerMove()
-//                    printBoard()
-                    
-                    
-                    
+ 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         let computerPosition = computerMove()
-                        print(computerPosition)
                         moves[computerPosition] = Move(player: .computer, index: computerPosition)
                         board[computerPosition] = "x"
                         numVacant -= 1
-                        printBoard()
                         
                         if(determineWinner() == "x") {
-                            print("Computer win")
+                            alertItem = AlertContent.computerWin
+                            return
+                        } else if(determineWinner() == "t") {
+                            alertItem = AlertContent.draw
+                            return
                         }
-                        
-
-
                     }
-                    
-                    
-                    
-                    
-                    
                 }
             }
         }
         .padding(20)
-    }
-    
-    func printBoard() {
-        for i in 0..<9 {
-            print(board[i], terminator: "");
-            
-            if((i + 1) % 3 == 0) {
-                print("\n");
-            }
-            
-        }
+        .alert(item: $alertItem, content: {alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: .default(alertItem.button, action: { resetGame() }))
+        })
     }
     
     
@@ -121,6 +107,12 @@ struct ContentView: View {
         return winner;
         
         
+    }
+    
+    func resetGame() {
+        moves = Array(repeating: nil, count: 9)
+        board = Array(repeating: "_", count: 9)
+        numVacant = 9
     }
     
     func minmax(isMaximizing: Bool) -> Int {
