@@ -1,9 +1,4 @@
-//
-//  main.cpp
-//  TictactoeMinMax
-//
-//  Created by Richard Huang on 2024-07-26.
-//
+//g++ -std=c++17 -o out main.cpp
 
 #include <iostream>
 #include <vector>
@@ -17,10 +12,6 @@ int numVacant = 9;
 vector<vector<char>> tttBoard {{'_', '_', '_'},
                                {'_', '_', '_'},
                                {'_', '_', '_'}};
-
-//vector<vector<char>> tttBoard {{'o', '_', 'x'},
-//                               {'o', 'o', '_'},
-//                               {'x', '_', '_'}};
 
 
 void playerMove() {
@@ -107,7 +98,6 @@ char determineWinner() {
     return winner;
     
 }
-
 
 int minmaxAlg(bool isMaximizing) {
     char winner = determineWinner();
