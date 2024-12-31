@@ -105,6 +105,10 @@ char determineWinner() {
         winner = 't';
     }
 
+    if(winner == 'o') wlt[0]++;
+    else if(winner == 'x') wlt[1]++;
+    else if(winner == 't') wlt[2]++;
+
     return winner;
 }
 

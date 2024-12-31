@@ -40,13 +40,14 @@ struct Text {
 
 // Extern variables so they can be used in multiple .cpp files
 extern int numVacant;
-extern vector<std::vector<char>> tttBoard;
+extern vector<vector<char>> tttBoard;
 extern vector<Line> grid;
 extern vector<Move> circles;
 extern vector<Move> xs;
 extern vector<Button> buttons;
 extern vector<Text> texts;
-extern TTF_Font* font; 
+extern TTF_Font* font;
+int wlt[3] = {}; 
 
 
 void loadBackground(SDL_Window* window, SDL_Renderer* renderer);

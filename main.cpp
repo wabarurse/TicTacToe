@@ -4,7 +4,6 @@
 int main(int argc, char** argv) {
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
-    
 
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
@@ -22,9 +21,9 @@ int main(int argc, char** argv) {
     grid.push_back({0, 480, 720, 480});
     grid.push_back({0, 720, 720, 720});
 
-    texts.push_back({"you : ", 24, 0, 720});
-    texts.push_back({"computer : ", 24, 0, 760});
-    texts.push_back({"tie : ", 24, 0, 800});
+    texts.push_back({"you : " + wlt[0], 24, 0, 720});
+    texts.push_back({"computer : " + wlt[1], 24, 0, 760});
+    texts.push_back({"tie : " + wlt[2], 24, 0, 800});
 
     render(renderer, grid, circles, xs, buttons, texts);
 
