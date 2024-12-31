@@ -6,6 +6,7 @@ Button::Button(int x, int y, int length, int width) {
     this->y = y;
     this->length = length;
     this->width = width;
+    rects.push_back({x, y, length, width});
 }
 
 void Button::createButton(SDL_Renderer* renderer) {

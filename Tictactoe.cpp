@@ -1,5 +1,5 @@
 #include "Tictactoe.hpp"
-#include "Button.hpp"
+//#include "Button.hpp"
 
 int numVacant = 9;
 
@@ -12,11 +12,12 @@ vector<vector<char>> tttBoard {
 vector<Line> grid;
 vector<Move> circles;
 vector<Move> xs;
+vector<Button> buttons;
+vector<Text> texts;
 
 void loadBackground(SDL_Window* window, SDL_Renderer* renderer) {
 
 }
-
 
 void drawX(SDL_Renderer* renderer, int x, int y, int length) {
     SDL_RenderDrawLine(renderer,
@@ -40,6 +41,21 @@ void drawCircle(SDL_Renderer* renderer, int x, int y, int radius) {
 
         SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)x2, (int)y2);
     }
+}
+
+void drawButton(SDL_Renderer* renderer, Button b) {
+    SDL_RenderDrawRect(renderer, &b.buttonRect);
+}
+
+void drawText(SDL_Renderer* renderer, Text text) {
+    SDL_Surface* surface = TTF_RenderText_Solid(TTF_OpenFont("OpenSans-Regular.ttf", text.fontSize), text.text.c_str(), {255, 255, 255});
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect dstRect = text.textRect;
+    
+    SDL_RenderCopy(renderer, texture, nullptr, &dstRect); 
+
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }
 
 Move determineQuadrant(float x, float y) {
@@ -164,7 +180,19 @@ void computerMove() {
     numVacant--;
 }
 
-void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xMoves) {
+void createButton(int x, int y, int length, int width) {
+    buttons.push_back({x, y, length, width});
+}
+
+bool isClicked(SDL_Rect rect, int mouseX, int mouseY) {
+    return mouseX > rect.x && mouseX < rect.x + rect.h && mouseY > rect.y && mouseY < rect.y + rect.w;
+}
+
+void createText(string text, int fontSize, int x, int y, int length, int width) {
+    texts.push_back({text, fontSize, {x, y, length, width}});
+}
+
+void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xMoves, vector<Button> buttons, vector<Text> texts) {
     for(const auto& l : g) {
         SDL_RenderDrawLine(renderer, l.x1, l.y1, l.x2, l.y2);
     }
@@ -174,40 +202,45 @@ void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Mov
     for(const auto& x : xMoves) {
         drawX(renderer, x.x, x.y, XLENGTH);
     }
+    for(const auto& b : buttons) {
+        drawButton(renderer, b);
+    }
+    for(const auto& t : texts) {
+        drawText(renderer, t);
+    }
     SDL_RenderPresent(renderer);
 }
 
-bool gameEnd(SDL_Renderer* renderer, char winner) {
+void clearBoard(SDL_Renderer* renderer) {
     grid.clear();
     circles.clear();
     xs.clear();
-    cout << determineWinner() << '\n';
-
-    //Button again(120, 480, 100, 50);
-    Button quit(500, 480, 100, 50);
-
-    //again.createButton(renderer);
-    quit.createButton(renderer);
-
-    render(renderer, grid, circles, xs);
-
-    int mouseX, mouseY;
-    do {
-        Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
-        cout << mouseX << " " << mouseY << '\n';
-        SDL_Delay(250);
-    } while (!quit.isClicked(mouseX, mouseY));
- 
-
-    return true;
-
-    // while(true) {
-    //     if(again.isClicked()) {
-    //         return false;
-    //     } else if(quit.isClicked()) {
-    //         return true;
-    //     }
-    //     SDL_Delay(250);
-    // }
-    
+    //render(renderer, grid, circles, xs);
 }
+
+// bool gameEnd(SDL_Renderer* renderer, char winner) {
+//     Button again(120, 480, 100, 50);
+//     Button quit(500, 480, 100, 50);
+
+//     again.createButton(renderer);
+//     quit.createButton(renderer);
+
+//     //render(renderer, grid, circles, xs);
+
+//     int mouseX, mouseY;
+//     SDL_Event e;
+//     while(SDL_PollEvent(&e)) {
+//         Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
+
+//         if(quit.isClicked(mouseX, mouseY)) {
+//             cout << "quit" << '\n';
+//             return true;
+//         } else if(again.isClicked(mouseX, mouseY)) {
+//             cout << "again" << '\n';
+//             return false;
+//         }
+//     }
+
+//     return false;
+
+// }
