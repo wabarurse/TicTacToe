@@ -50,7 +50,7 @@ void drawButton(SDL_Renderer* renderer, Button b) {
 void drawText(SDL_Renderer* renderer, Text text) {
     SDL_Surface* surface = TTF_RenderText_Solid(TTF_OpenFont("OpenSans-Regular.ttf", text.fontSize), text.text.c_str(), {255, 255, 255});
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_Rect dstRect = text.textRect;
+    SDL_Rect dstRect = {text.x, text.y, surface->w, surface->h};
     
     SDL_RenderCopy(renderer, texture, nullptr, &dstRect); 
 
@@ -189,7 +189,7 @@ bool isClicked(SDL_Rect rect, int mouseX, int mouseY) {
 }
 
 void createText(string text, int fontSize, int x, int y, int length, int width) {
-    texts.push_back({text, fontSize, {x, y, length, width}});
+    texts.push_back({text, fontSize, x, y});
 }
 
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xMoves, vector<Button> buttons, vector<Text> texts) {

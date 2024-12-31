@@ -22,9 +22,9 @@ int main(int argc, char** argv) {
     grid.push_back({0, 480, 720, 480});
     grid.push_back({0, 720, 720, 720});
 
-    texts.push_back({"you      : ", 100, {0, 720, 120, 40}});
-    texts.push_back({"computer : ", 100, {0, 760, 120, 40}});
-    texts.push_back({"tie      : ", 100, {0, 800, 120, 40}});
+    texts.push_back({"you : ", 24, 0, 720});
+    texts.push_back({"computer : ", 24, 0, 760});
+    texts.push_back({"tie : ", 24, 0, 800});
 
     render(renderer, grid, circles, xs, buttons, texts);
 

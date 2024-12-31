@@ -34,7 +34,8 @@ struct Button {
 struct Text {
     string text;
     int fontSize;
-    SDL_Rect textRect;
+    int x;
+    int y;
 };
 
 // Extern variables so they can be used in multiple .cpp files
