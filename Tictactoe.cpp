@@ -1,16 +1,22 @@
 #include "Tictactoe.hpp"
+#include "Button.hpp"
 
 int numVacant = 9;
 
-std::vector<std::vector<char>> tttBoard {
+vector<vector<char>> tttBoard {
     {'_', '_', '_'},
     {'_', '_', '_'},
     {'_', '_', '_'}
 };
 
-std::vector<Line> grid;
-std::vector<Move> circles;
-std::vector<Move> xs;
+vector<Line> grid;
+vector<Move> circles;
+vector<Move> xs;
+
+void loadBackground(SDL_Window* window, SDL_Renderer* renderer) {
+
+}
+
 
 void drawX(SDL_Renderer* renderer, int x, int y, int length) {
     SDL_RenderDrawLine(renderer,
@@ -27,10 +33,10 @@ void drawCircle(SDL_Renderer* renderer, int x, int y, int radius) {
         float theta1 = (2 * M_PI * i) / sides;
         float theta2 = (2 * M_PI * (i + 1)) / sides;
 
-        float x1 = x + radius * std::sin(theta1);
-        float y1 = y + radius * std::cos(theta1);
-        float x2 = x + radius * std::sin(theta2);
-        float y2 = y + radius * std::cos(theta2);
+        float x1 = x + radius * sin(theta1);
+        float y1 = y + radius * cos(theta1);
+        float x2 = x + radius * sin(theta2);
+        float y2 = y + radius * cos(theta2);
 
         SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)x2, (int)y2);
     }
@@ -104,7 +110,7 @@ int minmaxAlg(bool isMaximizing) {
                     int currScore = minmaxAlg(false);
                     tttBoard[i][j] = '_';
                     numVacant++;
-                    bestScore = std::max(bestScore, currScore);
+                    bestScore = max(bestScore, currScore);
                 }
             }
         }
@@ -120,7 +126,7 @@ int minmaxAlg(bool isMaximizing) {
                     int currScore = minmaxAlg(true);
                     tttBoard[i][j] = '_';
                     numVacant++;
-                    bestScore = std::min(bestScore, currScore);
+                    bestScore = min(bestScore, currScore);
                 }
             }
         }
@@ -158,11 +164,7 @@ void computerMove() {
     numVacant--;
 }
 
-void render(SDL_Renderer* renderer, 
-            std::vector<Line> g, 
-            std::vector<Move> cir, 
-            std::vector<Move> xMoves) 
-{
+void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xMoves) {
     for(const auto& l : g) {
         SDL_RenderDrawLine(renderer, l.x1, l.y1, l.x2, l.y2);
     }
@@ -173,4 +175,39 @@ void render(SDL_Renderer* renderer,
         drawX(renderer, x.x, x.y, XLENGTH);
     }
     SDL_RenderPresent(renderer);
+}
+
+bool gameEnd(SDL_Renderer* renderer, char winner) {
+    grid.clear();
+    circles.clear();
+    xs.clear();
+    cout << determineWinner() << '\n';
+
+    //Button again(120, 480, 100, 50);
+    Button quit(500, 480, 100, 50);
+
+    //again.createButton(renderer);
+    quit.createButton(renderer);
+
+    render(renderer, grid, circles, xs);
+
+    int mouseX, mouseY;
+    do {
+        Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
+        cout << mouseX << " " << mouseY << '\n';
+        SDL_Delay(250);
+    } while (!quit.isClicked(mouseX, mouseY));
+ 
+
+    return true;
+
+    // while(true) {
+    //     if(again.isClicked()) {
+    //         return false;
+    //     } else if(quit.isClicked()) {
+    //         return true;
+    //     }
+    //     SDL_Delay(250);
+    // }
+    
 }

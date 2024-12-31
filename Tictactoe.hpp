@@ -33,6 +33,7 @@ extern vector<Move> circles;
 extern vector<Move> xs;
 
 // Function prototypes
+void loadBackground(SDL_Window* window, SDL_Renderer* renderer);
 void drawX(SDL_Renderer* renderer, int x, int y, int length);
 void drawCircle(SDL_Renderer* renderer, int x, int y, int radius);
 Move determineQuadrant(float x, float y);
@@ -40,5 +41,6 @@ char determineWinner();
 int minmaxAlg(bool isMaximizing);
 void computerMove();
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xs);
+bool gameEnd(SDL_Renderer* renderer, char winner);
 
 #endif
