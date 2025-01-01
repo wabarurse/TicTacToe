@@ -1,5 +1,4 @@
 #include "Tictactoe.hpp"
-//#include "Button.hpp"
 
 int numVacant = 9;
 
@@ -58,6 +57,18 @@ void drawText(SDL_Renderer* renderer, Text text) {
     SDL_DestroyTexture(texture);
 }
 
+void addWLT(string& str) {
+    for (int i = 0; i < str.length(); i++) {
+        if (isdigit(str[i])) {
+            int start = i;
+            while (i < str.size() && isdigit(str[i])) i++;
+            int number = stoi(str.substr(start, i - start)) + 1;
+            str.replace(start, i - start, to_string(number));
+            return;
+        }
+    }
+}
+
 Move determineQuadrant(float x, float y) {
     tttBoard[(int)(y / 240)][(int)(x / 240)] = 'o';
     numVacant--;
@@ -104,10 +115,6 @@ char determineWinner() {
     if(winner == '/' && numVacant == 0) {
         winner = 't';
     }
-
-    if(winner == 'o') wlt[0]++;
-    else if(winner == 'x') wlt[1]++;
-    else if(winner == 't') wlt[2]++;
 
     return winner;
 }
@@ -220,6 +227,16 @@ void clearBoard(SDL_Renderer* renderer) {
     circles.clear();
     xs.clear();
     //render(renderer, grid, circles, xs);
+}
+
+void gameEnd(char winner) {
+    if(winner == 'o') {
+        addWLT(texts[0].text);
+    } else if(winner == 'x') {
+        addWLT(texts[1].text);
+    } else if(winner == 't') {
+        addWLT(texts[2].text);
+    }
 }
 
 // bool gameEnd(SDL_Renderer* renderer, char winner) {

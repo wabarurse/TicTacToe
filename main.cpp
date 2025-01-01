@@ -1,5 +1,4 @@
 #include "Tictactoe.hpp"
-#include "Button.hpp"
 
 int main(int argc, char** argv) {
     SDL_Window* window = nullptr;
@@ -21,9 +20,9 @@ int main(int argc, char** argv) {
     grid.push_back({0, 480, 720, 480});
     grid.push_back({0, 720, 720, 720});
 
-    texts.push_back({"you : " + wlt[0], 24, 0, 720});
-    texts.push_back({"computer : " + wlt[1], 24, 0, 760});
-    texts.push_back({"tie : " + wlt[2], 24, 0, 800});
+    texts.push_back({"you : 0", 24, 0, 720});
+    texts.push_back({"computer : 0", 24, 0, 760});
+    texts.push_back({"tie : 0", 24, 0, 800});
 
     render(renderer, grid, circles, xs, buttons, texts);
 
@@ -41,7 +40,8 @@ int main(int argc, char** argv) {
                 render(renderer, grid, circles, xs, buttons, texts);
 
                 if(determineWinner() != '/') {
-                    createButton(200, 280, 320, 160);
+                    cout << "here1" << '\n';
+                    gameEnd(determineWinner());
                     render(renderer, grid, circles, xs, buttons, texts);
                 }
 
@@ -51,12 +51,15 @@ int main(int argc, char** argv) {
                 render(renderer, grid, circles, xs, buttons, texts);
 
                 if(determineWinner() != '/') {
-                    createButton(200, 280, 320, 160);
+                    cout << "here2" << '\n';
+                    gameEnd(determineWinner());
                     render(renderer, grid, circles, xs, buttons, texts);
+
                 }
             }
+            SDL_Delay(10);
         }
-        SDL_Delay(10);
+        //SDL_Delay(10);
     }
 
     SDL_DestroyRenderer(renderer);

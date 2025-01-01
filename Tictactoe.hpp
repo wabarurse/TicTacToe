@@ -6,7 +6,8 @@
 #include <iostream>
 #include <vector>
 #include <climits>
-#include <cmath>     
+#include <cmath>  
+#include <string>
 
 using namespace std;
 
@@ -47,8 +48,7 @@ extern vector<Move> xs;
 extern vector<Button> buttons;
 extern vector<Text> texts;
 extern TTF_Font* font;
-int wlt[3] = {}; 
-
+extern int wlt[3];
 
 void loadBackground(SDL_Window* window, SDL_Renderer* renderer);
 void drawX(SDL_Renderer* renderer, int x, int y, int length);
@@ -63,7 +63,7 @@ int minmaxAlg(bool isMaximizing);
 void computerMove();
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xs, vector<Button> buttons, vector<Text> texts);
 void clearBoard(SDL_Renderer* renderer);
-bool gameEnd(SDL_Renderer* renderer, char winner);
+void gameEnd(char winner);
 void createButton(int x, int y, int length, int width);
 bool isClicked(SDL_Rect rect, int mouseX, int mouseY);
 
