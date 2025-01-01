@@ -55,7 +55,7 @@ void drawX(SDL_Renderer* renderer, int x, int y, int length);
 void drawCircle(SDL_Renderer* renderer, int x, int y, int radius);
 void drawButton(SDL_Renderer* renderer, Button b);
 void drawText(SDL_Renderer* renderer, int fontSize, Text text);
-void createText(string text, int x, int y, int length, int width);
+void createText(string text, int fontSize, int x, int y);
 
 Move determineQuadrant(float x, float y);
 char determineWinner();
@@ -63,7 +63,7 @@ int minmaxAlg(bool isMaximizing);
 void computerMove();
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xs, vector<Button> buttons, vector<Text> texts);
 void clearBoard(SDL_Renderer* renderer);
-void gameEnd(char winner);
+bool gameEnd(SDL_Renderer* renderer, char winner);
 void createButton(int x, int y, int length, int width);
 bool isClicked(SDL_Rect rect, int mouseX, int mouseY);
 

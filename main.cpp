@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
                 render(renderer, grid, circles, xs, buttons, texts);
 
                 if(determineWinner() != '/') {
-                    cout << "here1" << '\n';
-                    gameEnd(determineWinner());
-                    render(renderer, grid, circles, xs, buttons, texts);
+                    if(gameEnd(renderer, determineWinner())) {
+                        quit = true;
+                    }
                 }
 
                 SDL_Delay(1000);
@@ -51,10 +51,9 @@ int main(int argc, char** argv) {
                 render(renderer, grid, circles, xs, buttons, texts);
 
                 if(determineWinner() != '/') {
-                    cout << "here2" << '\n';
-                    gameEnd(determineWinner());
-                    render(renderer, grid, circles, xs, buttons, texts);
-
+                    if(gameEnd(renderer, determineWinner())) {
+                        quit = true;
+                    }
                 }
             }
             SDL_Delay(10);

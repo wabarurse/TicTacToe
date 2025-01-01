@@ -196,10 +196,10 @@ void createButton(int x, int y, int length, int width) {
 }
 
 bool isClicked(SDL_Rect rect, int mouseX, int mouseY) {
-    return mouseX > rect.x && mouseX < rect.x + rect.h && mouseY > rect.y && mouseY < rect.y + rect.w;
+    return mouseX > rect.x && mouseX < rect.x + rect.w && mouseY > rect.y && mouseY < rect.y + rect.h;
 }
 
-void createText(string text, int fontSize, int x, int y, int length, int width) {
+void createText(string text, int fontSize, int x, int y) {
     texts.push_back({text, fontSize, x, y});
 }
 
@@ -229,14 +229,46 @@ void clearBoard(SDL_Renderer* renderer) {
     //render(renderer, grid, circles, xs);
 }
 
-void gameEnd(char winner) {
+bool gameEnd(SDL_Renderer* renderer, char winner) {
     if(winner == 'o') {
         addWLT(texts[0].text);
+        createText("YOU WON! (they should never see this)", 24, 240, 740);
     } else if(winner == 'x') {
         addWLT(texts[1].text);
+        createText("YOU LOST! damn, you suck", 24, 240, 740);
     } else if(winner == 't') {
         addWLT(texts[2].text);
+        createText("its a tie...", 24, 240, 740);
     }
+
+    createButton(620, 720, 100, 60);
+    createButton(620, 780, 100, 60);
+
+    render(renderer, grid, circles, xs, buttons, texts);
+
+    // chat gpt ----------
+
+    bool running = true;
+
+    while (running) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) running = false;
+        }
+
+        int mouseX, mouseY;
+        Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
+
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[0].buttonRect, mouseX, mouseY)) 
+            return false;
+        else if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[1].buttonRect, mouseX, mouseY)) 
+            return true;
+            
+        cout << '\n';
+
+        SDL_Delay(10); 
+    }
+    return false;
 }
 
 // bool gameEnd(SDL_Renderer* renderer, char winner) {
