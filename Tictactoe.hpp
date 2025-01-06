@@ -57,6 +57,7 @@ void drawButton(SDL_Renderer* renderer, Button b);
 void drawText(SDL_Renderer* renderer, int fontSize, Text text);
 void createText(string text, int fontSize, int x, int y);
 
+void addWLT(string& str);
 Move determineQuadrant(float x, float y);
 char determineWinner();
 int minmaxAlg(bool isMaximizing);

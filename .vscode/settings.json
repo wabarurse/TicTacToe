@@ -70,7 +70,8 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "text_encoding": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "numbers": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/g++"
 }

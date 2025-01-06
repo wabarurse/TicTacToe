@@ -8,9 +8,6 @@ int main(int argc, char** argv) {
     TTF_Init();
 
     SDL_CreateWindowAndRenderer(720, 840, 0, &window, &renderer);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
     SDL_StartTextInput();
 
@@ -41,7 +38,11 @@ int main(int argc, char** argv) {
 
                 if(determineWinner() != '/') {
                     if(gameEnd(renderer, determineWinner())) {
-                        quit = true;
+                        cout << "first" << '\n';
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_Quit();
+                        return 0;
                     }
                 }
 
@@ -52,7 +53,11 @@ int main(int argc, char** argv) {
 
                 if(determineWinner() != '/') {
                     if(gameEnd(renderer, determineWinner())) {
-                        quit = true;
+                        cout << "second" << '\n';
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_Quit();
+                        return 0;
                     }
                 }
             }
@@ -61,8 +66,5 @@ int main(int argc, char** argv) {
         //SDL_Delay(10);
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    return 0;
+    
 }

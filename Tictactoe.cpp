@@ -204,6 +204,11 @@ void createText(string text, int fontSize, int x, int y) {
 }
 
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xMoves, vector<Button> buttons, vector<Text> texts) {
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    
     for(const auto& l : g) {
         SDL_RenderDrawLine(renderer, l.x1, l.y1, l.x2, l.y2);
     }
@@ -219,6 +224,7 @@ void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Mov
     for(const auto& t : texts) {
         drawText(renderer, t);
     }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -249,51 +255,29 @@ bool gameEnd(SDL_Renderer* renderer, char winner) {
     // chat gpt ----------
 
     bool running = true;
+    bool gameEnd = false;
 
     while (running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = false;
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
         }
 
         int mouseX, mouseY;
         Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
 
-        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[0].buttonRect, mouseX, mouseY)) 
-            return false;
-        else if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[1].buttonRect, mouseX, mouseY)) 
-            return true;
-            
-        cout << '\n';
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[0].buttonRect, mouseX, mouseY)) {
+            running = false;
+        }
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT) && isClicked(buttons[1].buttonRect, mouseX, mouseY)) {
+            running = false;
+            gameEnd = true;
+        }
 
         SDL_Delay(10); 
     }
-    return false;
+    return gameEnd;
 }
 
-// bool gameEnd(SDL_Renderer* renderer, char winner) {
-//     Button again(120, 480, 100, 50);
-//     Button quit(500, 480, 100, 50);
-
-//     again.createButton(renderer);
-//     quit.createButton(renderer);
-
-//     //render(renderer, grid, circles, xs);
-
-//     int mouseX, mouseY;
-//     SDL_Event e;
-//     while(SDL_PollEvent(&e)) {
-//         Uint32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
-
-//         if(quit.isClicked(mouseX, mouseY)) {
-//             cout << "quit" << '\n';
-//             return true;
-//         } else if(again.isClicked(mouseX, mouseY)) {
-//             cout << "again" << '\n';
-//             return false;
-//         }
-//     }
-
-//     return false;
-
-// }
