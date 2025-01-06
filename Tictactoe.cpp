@@ -70,12 +70,35 @@ void addWLT(string& str) {
 }
 
 Move determineQuadrant(float x, float y) {
+    int r = (int)(y / 240);
+    int c = (int)(x / 240);
+    if(r > 2 || c > 2 || tttBoard[r][c] != '_') {
+        return Move::invalid();
+    }
     tttBoard[(int)(y / 240)][(int)(x / 240)] = 'o';
     numVacant--;
     return {
         120 + 240 * ((int)(x / 240)),
         120 + 240 * ((int)(y / 240))
     };
+}
+
+void playerMove() {
+    while (true) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_MOUSEBUTTONUP) {
+                Move move = determineQuadrant(event.button.x, event.button.y);
+
+                if (move.isValid()) {
+                    circles.push_back(move);
+                    return; 
+                } else {
+                    cout << "Error: invalid move, please try again.\n";
+                }
+            }
+        }
+    }
 }
 
 char determineWinner() {
@@ -232,7 +255,7 @@ void clearBoard(SDL_Renderer* renderer) {
     grid.clear();
     circles.clear();
     xs.clear();
-    //render(renderer, grid, circles, xs);
+    render(renderer, grid, circles, xs, buttons, texts);
 }
 
 bool gameEnd(SDL_Renderer* renderer, char winner) {
@@ -278,6 +301,7 @@ bool gameEnd(SDL_Renderer* renderer, char winner) {
 
         SDL_Delay(10); 
     }
+    cout << gameEnd << '\n';
     return gameEnd;
 }
 

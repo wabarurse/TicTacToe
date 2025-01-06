@@ -26,6 +26,12 @@ struct Line {
 struct Move {
     int x;
     int y;
+    static Move invalid() {
+        return {-1, -1};
+    }
+    bool isValid() {
+        return x != -1 || y != -1;
+    }
 };
 
 struct Button {
@@ -61,6 +67,7 @@ void addWLT(string& str);
 Move determineQuadrant(float x, float y);
 char determineWinner();
 int minmaxAlg(bool isMaximizing);
+void playerMove();
 void computerMove();
 void render(SDL_Renderer* renderer, vector<Line> g, vector<Move> cir, vector<Move> xs, vector<Button> buttons, vector<Text> texts);
 void clearBoard(SDL_Renderer* renderer);
